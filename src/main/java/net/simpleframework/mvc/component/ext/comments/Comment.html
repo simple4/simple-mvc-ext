@@ -1,0 +1,48 @@
+<div class="t1_head">
+  <div class="l1">
+    <div class="reply"></div>
+    #(Comment.html.0)<span class="num">${count}</span>#(Comment.html.1)
+  </div>
+  <div class="l2">
+    <textarea id="textarea_${hashId}" name="comment" rows="5"></textarea>
+    <input type="hidden" name="parentId" />
+  </div>
+  <div class="l3">
+    $if{showSmiley == true}
+    <a class="smiley" onclick="$Actions['${name}_smiley']();">#(Comment.html.3)</a>
+    $end{}
+    <a id="submit_${hashId}" class="simple_btn simple_btn_all"
+      onclick="$Actions['${name}_submit']($Form(this.up('.t1_head')));">#(Comment.html.2)</a>
+  </div>
+</div>
+<div class="t1_comments">
+  <div id="pager_${hashId}"></div>
+</div>
+<script type="text/javascript">
+	function $comment_reply_click(val, txt) {
+		var ta = $("textarea_${hashId}");
+		var parentId = ta.next();
+		parentId.value = val;
+		var reply = ta.up(".t1_head").down(".reply");
+		reply.innerHTML = txt + "<span class='delete_image'></span>";
+		reply.down(".delete_image").observe("click", function(evn) {
+			reply.innerHTML = "";
+			parentId.value = "";
+		});
+		reply.scrollTo();
+		ta.focus();
+	}
+
+	function $comment_do_callback(num) {
+		var ta = $("textarea_${hashId}");
+		ta.clear();
+		var parentId = ta.next();
+		parentId.clear();
+
+		var h = ta.up(".t1_head");
+		h.down(".reply").innerHTML = "";
+		h.down(".num").innerHTML = num;
+
+		$Actions['${name}_pager']();
+	}
+</script>

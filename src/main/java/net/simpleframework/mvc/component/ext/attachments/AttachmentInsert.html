@@ -1,0 +1,36 @@
+<div class="b_attach">
+  <table>
+    <tr>
+      <td style="width: 20px;"><input type="checkbox" id="checkAll_${beanId}" /></td>
+      <td><label for="checkAll_${beanId}">#(AttachmentInsert.1)</label></td>
+      <td align="right"><a class="simple_btn simple_btn_all">#(AttachmentInsert.0)</a></td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript">
+	$ready(function() {
+		var checkAll = $("checkAll_${beanId}");
+		var b = checkAll.up(".b_attach");
+		checkAll.observe("click", function(evn) {
+			b.previous().select("input[type=checkbox]").each(function(box) {
+				box.checked = checkAll.checked;
+			});
+		});
+
+		b.down(".simple_btn").observe(
+				"click",
+				function(evn) {
+					var idArr = b.previous().select("input[type=checkbox]").inject([],
+							function(r, box) {
+								if (box.checked)
+									r.push(box.id);
+								return r;
+							});
+					if (idArr.length == 0) {
+						alert("#(AttachmentInsert.2)");
+						return;
+					}
+					$Actions["${name}_selected"]("ids=" + idArr.join(";"));
+				});
+	});
+</script>
